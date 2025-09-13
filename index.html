@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carta Realista</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Georgia', serif;
+    background: radial-gradient(circle at top, #ffe6f0, #fff0f5);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  /* Carta */
+  .carta-container {
+    perspective: 1000px;
+  }
+
+  .carta {
+    width: 400px;
+    height: 250px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 1s;
+    cursor: pointer;
+  }
+
+  /* Capa da carta */
+  .carta .capa {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom right, #ffccd5, #ff99b3);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    color: #fff;
+    backface-visibility: hidden;
+  }
+
+  /* Interior da carta */
+  .carta .conteudo {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #fff8f8;
+    border-radius: 10px;
+    padding: 10px 20px 20px 20px; /* padding-top reduzido para subir o texto */
+    box-sizing: border-box;
+    backface-visibility: hidden;
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .carta .conteudo h1 {
+    color: #d6336c;
+    margin-bottom: 10px;
+  }
+
+  .carta .conteudo p {
+    color: #333;
+    font-size: 1.1em;
+    line-height: 1.5;
+    min-height: 120px;
+  }
+
+  .carta.open {
+    transform: rotateY(180deg);
+  }
+
+  /* Corações e pétalas animadas */
+  .float {
+    position: absolute;
+    font-size: 2em;
+    pointer-events: none;
+    animation: floatAnim 5s linear infinite;
+  }
+
+  @keyframes floatAnim {
+    0% {transform: translateY(0) rotate(0deg); opacity:1;}
+    50% {opacity:0.8;}
+    100% {transform: translateY(-100vh) rotate(360deg); opacity:0;}
+  }
+</style>
+</head>
+<body>
+
+<div class="carta-container">
+  <div class="carta" id="carta">
+    <div class="capa">💌 Clique para abrir</div>
+    <div class="conteudo">
+      <h1>Para Você, Amor 💖</h1>
+      <p id="textoCarta"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const carta = document.getElementById('carta');
+  const texto = `Minha querida,  
+Cada dia que passa eu me apaixono mais por você. Você ilumina meus dias e faz meu coração sorrir.  
+Obrigado por ser quem você é.  
+Eu te amo ❤️`;
+
+  const elemento = document.getElementById('textoCarta');
+  let index = 0;
+
+  function digitar() {
+    if (index < texto.length) {
+      if(texto[index] === '\n') {
+        elemento.innerHTML += '<br>';
+      } else {
+        elemento.innerHTML += texto[index];
+      }
+      index++;
+      setTimeout(digitar, 50);
+    }
+  }
+
+  // Abrir carta
+  carta.addEventListener('click', () => {
+    if (!carta.classList.contains('open')) {
+      carta.classList.add('open');
+      digitar();
+    }
+  });
+
+  // Criar corações/pétalas flutuantes
+  function criarFloat() {
+    const float = document.createElement('div');
+    float.classList.add('float');
+    float.style.left = Math.random() * window.innerWidth + 'px';
+    float.innerHTML = Math.random() > 0.5 ? '❤️' : '🌸';
+    float.style.fontSize = (20 + Math.random() * 30) + 'px';
+    document.body.appendChild(float);
+
+    setTimeout(() => { float.remove(); }, 5000);
+  }
+
+  setInterval(criarFloat, 400);
+</script>
+
+</body>
+</html>
